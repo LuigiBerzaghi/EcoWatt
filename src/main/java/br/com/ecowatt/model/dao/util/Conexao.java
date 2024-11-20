@@ -1,6 +1,7 @@
 package br.com.ecowatt.model.dao.util;
 
 import java.sql.Connection;
+
 import java.sql.SQLException;
 import oracle.jdbc.datasource.impl.OracleDataSource;
 
