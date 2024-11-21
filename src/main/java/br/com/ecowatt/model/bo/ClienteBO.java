@@ -49,7 +49,7 @@ public class ClienteBO {
         }
         return (ArrayList<Cliente>) clienteDAO.selecionar();
     }
-    
+    // Método para validar o login
     public Cliente validarLoginBO(String email, String senha) throws SQLException {
         if (clienteDAO == null) {
             throw new IllegalStateException("ClienteDAO não foi inicializado.");
@@ -57,11 +57,22 @@ public class ClienteBO {
         return clienteDAO.validarLogin(email, senha);
     }
     
- // Método para buscar cliente por CPF no BO
+ // Método para buscar cliente por CPF
     public Cliente obterClientePorCpfBO(String cpf) throws SQLException {
         if (clienteDAO == null) {
             throw new IllegalStateException("ClienteDAO não foi inicializado.");
         }
         return clienteDAO.obterPorCpf(cpf);
     }
+    
+ // Método para atualizar a senha
+    public void atualizarSenha(String cpf, String novaSenha) throws SQLException {
+     
+        String senhaAtual = clienteDAO.obterSenhaAtual(cpf);
+        if (senhaAtual != null && senhaAtual.equals(novaSenha)) {
+            throw new IllegalArgumentException("A nova senha não pode ser a mesma que a senha atual.");
+        }
+        clienteDAO.atualizarSenha(cpf, novaSenha);
+    }
+
 }

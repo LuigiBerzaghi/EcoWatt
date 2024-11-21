@@ -82,7 +82,7 @@ public class ClienteResource {
 		return Response.ok().build();
 	}
 	
-	
+	//pegar (GET)
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Cliente> selecionarRs() throws ClassNotFoundException {
@@ -129,4 +129,24 @@ public class ClienteResource {
 	        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao obter cliente: " + e.getMessage()).build();
 	    }
 	}
+	
+	@PUT
+	@Path("/{cpf}/senha")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response atualizarSenha(@PathParam("cpf") String cpf, Cliente cliente) {
+	    try {
+	        if (cliente.getSenha() == null || cliente.getSenha().isEmpty()) {
+	            return Response.status(Response.Status.BAD_REQUEST)
+	                           .entity("A senha não pode ser vazia.").build();
+	        }
+	        clienteBO.atualizarSenha(cpf, cliente.getSenha());
+
+	        return Response.ok("Senha atualizada com sucesso!").build();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+	                       .entity("Erro ao atualizar a senha: " + e.getMessage()).build();
+	    }
+	}
+	
 }

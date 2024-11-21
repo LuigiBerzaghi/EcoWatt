@@ -212,5 +212,49 @@ public class ClienteDAO {
             fecharRecursos(stmt, conn, rs);
         }
     }
+    
+    // Método para obter a senha atual do cliente
+    public String obterSenhaAtual(String cpf) throws SQLException {
+        String sql = "SELECT senha FROM cliente WHERE cpf = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = Conexao.getConexao();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cpf);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getString("senha");  
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao buscar a senha do cliente: " + e.getMessage());
+        } finally {
+            fecharRecursos(stmt, conn, rs);
+        }
+        return null; 
+    }
+
+    // Método para atualizar a senha do cliente
+    public void atualizarSenha(String cpf, String novaSenha) throws SQLException {
+        String sql = "UPDATE cliente SET senha = ? WHERE cpf = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = Conexao.getConexao();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, novaSenha);
+            stmt.setString(2, cpf);
+            stmt.executeUpdate();
+            System.out.println("\nSenha do cliente atualizada com sucesso!");
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao atualizar a senha do cliente: " + e.getMessage());
+        } finally {
+            fecharRecursos(stmt, conn);
+        }
+    }
 
 }
