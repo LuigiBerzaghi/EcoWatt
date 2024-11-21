@@ -100,14 +100,12 @@ public class ClienteResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(Cliente cliente) {
 	    try {
-	        // Chama o BO para validar o login
 	        Cliente clienteAutenticado = clienteBO.validarLoginBO(cliente.getEmail(), cliente.getSenha());
 	        
 	        if (clienteAutenticado != null) {
-	            // Retorna as informações do cliente (sem a senha) em caso de sucesso
+
 	            return Response.ok(clienteAutenticado).build();
 	        } else {
-	            // Retorna erro se email ou senha estiverem incorretos
 	            return Response.status(Response.Status.UNAUTHORIZED).entity("Email ou senha incorretos").build();
 	        }
 	    } catch (SQLException e) {
