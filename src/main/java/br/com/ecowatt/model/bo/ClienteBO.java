@@ -49,4 +49,19 @@ public class ClienteBO {
         }
         return (ArrayList<Cliente>) clienteDAO.selecionar();
     }
+    
+    public Cliente validarLoginBO(String email, String senha) throws SQLException {
+        if (clienteDAO == null) {
+            throw new IllegalStateException("ClienteDAO não foi inicializado.");
+        }
+        return clienteDAO.validarLogin(email, senha);
+    }
+    
+ // Método para buscar cliente por CPF no BO
+    public Cliente obterClientePorCpfBO(String cpf) throws SQLException {
+        if (clienteDAO == null) {
+            throw new IllegalStateException("ClienteDAO não foi inicializado.");
+        }
+        return clienteDAO.obterPorCpf(cpf);
+    }
 }

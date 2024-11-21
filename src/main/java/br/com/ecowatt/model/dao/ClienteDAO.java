@@ -148,5 +148,69 @@ public class ClienteDAO {
         } catch (SQLException e) {
             System.err.println("\nErro ao fechar o ResultSet: " + e.getMessage());
         }
-    }		
+        
+    }	
+    
+    public Cliente validarLogin(String email, String senha) throws SQLException {
+        String sql = "SELECT * FROM cliente WHERE email = ? AND senha = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = Conexao.getConexao();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            stmt.setString(2, senha);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setCpf(rs.getString("cpf"));
+                cliente.setNome(rs.getString("nome"));
+                cliente.setEmail(rs.getString("email"));
+                cliente.setSenha(rs.getString("senha"));
+                return cliente;  // Retorna o cliente encontrado
+            } else {
+                return null;  // Retorna null se não encontrar nenhum cliente com o email e senha
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erro ao validar login: " + e.getMessage());
+        } finally {
+            fecharRecursos(stmt, conn, rs);
+        }
+    }
+    
+ // Método para buscar cliente por CPF
+    public Cliente obterPorCpf(String cpf) throws SQLException {
+        String sql = "SELECT * FROM cliente WHERE cpf = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = Conexao.getConexao();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cpf);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setCpf(rs.getString("cpf"));
+                cliente.setNome(rs.getString("nome"));
+                cliente.setEmail(rs.getString("email"));
+                cliente.setSenha(rs.getString("senha"));
+                return cliente;
+            } else {
+                return null;  
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erro ao obter cliente por CPF: " + e.getMessage());
+        } finally {
+            fecharRecursos(stmt, conn, rs);
+        }
+    }
+
 }

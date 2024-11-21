@@ -93,4 +93,42 @@ public class ClienteResource {
 	        throw new RuntimeException("Erro ao listar clientes: " + e.getMessage());
 	    }
 	}
+	
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(Cliente cliente) {
+	    try {
+	        // Chama o BO para validar o login
+	        Cliente clienteAutenticado = clienteBO.validarLoginBO(cliente.getEmail(), cliente.getSenha());
+	        
+	        if (clienteAutenticado != null) {
+	            // Retorna as informações do cliente (sem a senha) em caso de sucesso
+	            return Response.ok(clienteAutenticado).build();
+	        } else {
+	            // Retorna erro se email ou senha estiverem incorretos
+	            return Response.status(Response.Status.UNAUTHORIZED).entity("Email ou senha incorretos").build();
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao validar login: " + e.getMessage()).build();
+	    }
+	}
+	
+	@GET
+	@Path("/{cpf}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obterClientePorCpf(@PathParam("cpf") String cpf) throws SQLException, ClassNotFoundException {
+	    try {
+	        Cliente cliente = clienteBO.obterClientePorCpfBO(cpf);
+	        if (cliente == null) {
+	            return Response.status(Response.Status.NOT_FOUND).entity("Cliente não encontrado").build();
+	        }
+	        return Response.ok(cliente).build();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao obter cliente: " + e.getMessage()).build();
+	    }
+	}
 }
