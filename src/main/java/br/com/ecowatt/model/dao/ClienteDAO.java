@@ -170,9 +170,9 @@ public class ClienteDAO {
                 cliente.setNome(rs.getString("nome"));
                 cliente.setEmail(rs.getString("email"));
                 cliente.setSenha(rs.getString("senha"));
-                return cliente;  // Retorna o cliente encontrado
+                return cliente; 
             } else {
-                return null;  // Retorna null se não encontrar nenhum cliente com o email e senha
+                return null; 
             }
         } catch (SQLException e) {
             e.printStackTrace();
